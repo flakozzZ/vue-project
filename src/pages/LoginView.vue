@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
+import AuthPage from "@/widgets/auth/index.vue";
 </script>
 
 <template>
-  <slot/>
+  <auth-page/>
 </template>
 
 <style scoped>

@@ -1,9 +1,9 @@
 import {createApp} from "vue";
-import {createPinia} from "@/app/providers/store.ts"
-import router from "./providers/router.ts";
+import router from "./providers/router";
+import {createPinia} from "pinia";
 import App from "./index.vue";
 import "./index.scss"
-import axiosInstance from "@/app/providers/axios.ts";
 
+const pinia = createPinia()
 
-export const app = createApp(App).use(createPinia).use(router).use(axiosInstance)
+export const app = createApp(App).use(router).use(pinia)
