@@ -1,53 +1,113 @@
+<script lang="ts">
+export default {
+  name: "v-modal"
+}
+</script>
 
 <template>
-  <div :class="[
-      'modal-container',
-      props.show ? 'visible' : 'hidden'
-  ]" id="crud-modal" tabindex="-1" aria-hidden="true">
-    <div class="relative p-4 w-full max-w-4xl max-h-full">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <!-- Modal header -->
-          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <slot name="header"></slot>
-<!--            <img @click="$emit('close')" class="cursor-pointer" alt="icon" src="~/assets/icons/close.svg" width="36" height="36" >-->
+  <Transition name="modal">
+  <div
+      v-if="props.show"
+      class="modal-mask"
+      @click="$emit('close')"
+  >
+      <div v-if="props.show">
+        <div class="modal-container" @click.stop>
+          <div class="modal-header">
+            {{props.title}}
+            <icon class="close__icon mt-1 cursor-pointer" name="close" @click="$emit('close')" />
           </div>
-        <!-- Modal body -->
-        <div class="p-4 md:p-5 space-y-4">
-          <slot name="default">
-          </slot>
+
+          <div class="modal-body">
+            <slot name="body"></slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+            </slot>
+          </div>
         </div>
       </div>
-    </div>
   </div>
+  </Transition>
 
 </template>
 
 <script setup lang="ts">
+
+import Icon from "@/shared/ui/icon/index.vue";
+
 interface Props {
   show: boolean
+  title: string
 }
-
 const props = withDefaults(defineProps<Props>(), {})
-
-defineEmits(['close'])
 </script>
-<style scoped>
-.modal-container {
+
+<style>
+.modal-mask {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease; /* добавляем переход для свойства opacity */
-  opacity: 0; /* начальное значение непрозрачности */
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
 }
 
-.visible {
-  opacity: 1; /* значение непрозрачности для видимого состояния */
+.modal-container {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin: auto;
+  padding: 20px 30px;
+  background-color: rgb(31 41 55);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
 }
 
-.hidden {
-  opacity: 0; /* значение непрозрачности для скрытого состояния */
-  pointer-events: none; /* чтобы элемент был невидимым для пользовательских событий при скрытии */
+.modal-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 0;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.close__icon {
+  width: 36px;
+  height: 36px;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter-from {
+  opacity: 0;
+}
+
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from .modal-container,
+.modal-leave-to .modal-container {
+  transform: scale(1.1);
 }
 </style>

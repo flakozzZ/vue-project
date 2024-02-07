@@ -62,7 +62,6 @@ export default {
 </template>
 
 <script setup lang="ts">
-import type {AxiosError} from "axios";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/plugins/user.ts";
@@ -74,7 +73,7 @@ import VInput from "@/shared/ui/v-input/index.vue";
 
 const router = useRouter()
 const store = useUserStore()
-const {LOGIN_USER, LOGOUT_USER} = store
+const {LOGIN_USER} = store
 const {user} = storeToRefs(store)
 
 const is_loading = ref(false)
@@ -86,19 +85,11 @@ const error = ref("")
 const authorize = async() => {
   is_loading.value = true
   error.value = ''
-  try {
     const data = await LOGIN_USER({
       email: email.value,
       password: password.value
     })
     handleRouteChange(data?.appRole.name)
-    // await router.push({ name: 'AdminAnalytics' })
-  } catch(e) {
-    const errors = e as AxiosError
-    error.value = errors.response.data?.detail || 'Ошибка!'
-  } finally {
-    is_loading.value = false
-  }
 }
 
 const handleRouteChange = (role: string) => {
@@ -108,10 +99,9 @@ const handleRouteChange = (role: string) => {
     'ROLE_MANAGER': 'manager-teachers',
     'ROLE_TEACHER': 'teacher-groups'
   }[role]
-  if(role) {router.push({name: routeName})}
-  else {
-    console.log("Not found")
-  }
+  if(role) {router.push({
+    name: routeName
+  })}
 }
 
 

@@ -28,55 +28,48 @@ export default {
 </template>
 
 <script setup lang="ts">
-import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
-import {computed, defineAsyncComponent} from "vue";
+import {computed} from "vue";
 import {useUserStore} from "@/plugins/user.ts";
 import Icon from "@/shared/ui/icon/index.vue";
 
-const ADMIN_MENU_ITEMS = [
-  {label: 'Добавить менеджера', icon: 'add_user', routeName: ''},
-  {label: 'Добавить учителя', icon: 'student', routeName: ''},
-  {label: 'Добавить класс', icon: 'user_group', routeName: ''},
-  // { label: 'Оқушылар', icon: 'user_list', routeName: 'ManagerStudentList' },
-  // { label: 'Онлайн тесттер', icon: 'test', routeName: 'AdminOnlineTestList' },
+
+interface MenuItems {
+  label: string
+  icon: string
+  routeName: string
+}
+const ADMIN_MENU_ITEMS: MenuItems[] = [
+  // {label: 'Добавить менеджера', icon: 'add_user', routeName: ''},
+  // {label: 'Добавить учителя', icon: 'student', routeName: ''},
+  // {label: 'Добавить класс', icon: 'user_group', routeName: ''},
   {label: 'Добавить курс', icon: 'graduation_cap', routeName: 'AdminCourses'},
-  // { label: 'Тест қосу', icon: 'exam', routeName: 'AdminTestList' },
-  {label: 'Добавить профессию', icon: 'star', routeName: ''},
-  {label: 'Добавить ВУЗ', icon: 'plus', routeName: ''},
-  {label: 'Новости', icon: 'newspaper', routeName: ''},
+  // {label: 'Добавить профессию', icon: 'star', routeName: ''},
+  // {label: 'Добавить ВУЗ', icon: 'plus', routeName: ''},
+  // {label: 'Новости', icon: 'newspaper', routeName: ''},
 ]
 
-const MANAGER_MENU_ITEMS = [
+const MANAGER_MENU_ITEMS: MenuItems[] = [
   {label: 'Добавить ученика', icon: 'plus', routeName: ''},
   {label: 'Все ученики', icon: 'user_group', routeName: ''},
   {label: 'Мои ученики', icon: 'user_circle', routeName: ''},
 ]
 
-const TEACHER_MENU_ITEMS = [
+const TEACHER_MENU_ITEMS: MenuItems[] = [
   {label: 'Главная страница', icon: 'star', routeName: ''},
   {label: 'Профиль', icon: 'user', routeName: ''},
   {label: 'Классы', icon: 'user_group', routeName: ''},
-  // { label: 'Тапсырмалар', icon: 'pencil', routeName: 'TeacherTask' },
-  // { label: 'Бағалар', icon: 'text_check', routeName: 'TeacherGrade' },
-  // { label: 'Аналитика', icon: 'analytics', routeName: 'TeacherAnalytics' },
 ]
 
-const STUDENT_MENU_ITEMS = [
+const STUDENT_MENU_ITEMS: MenuItems[] = [
   {label: 'Курсы', icon: 'star', routeName: ''},
   {label: 'Профиль', icon: 'user', routeName: ''},
   {label: 'Успеваемость', icon: 'bookmark', routeName: ''},
   {label: 'Вопрос - Ответ', icon: 'question', routeName: ''},
   {label: 'Новости', icon: 'globe', routeName: ''},
   {label: 'ВУЗ', icon: 'graduation_cap', routeName: ''},
-  // { label: 'Сыныптар', icon: 'user_group', routeName: 'TeacherGroupList' },
-  // { label: 'Тапсырмалар', icon: 'pencil', routeName: 'TeacherTask' },
-  // { label: 'Бағалар', icon: 'text_check', routeName: 'TeacherGrade' },
-  // { label: 'Аналитика', icon: 'analytics', routeName: 'TeacherAnalytics' },
 ]
-const router = useRouter()
 const store = useUserStore()
-const {LOGOUT_USER} = store
 const {user} = storeToRefs(store)
 
 const menu_items = computed(() => {
@@ -91,13 +84,6 @@ const menu_items = computed(() => {
 })
 
 
-const getIcon = (name: string) => {
-  return defineAsyncComponent(() => import(`@/shared/assets/icons/sidebar/${name}.svg`))
-}
-const logout = () => {
-  LOGOUT_USER()
-  router.push('/')
-}
 </script>
 
 <style scoped>

@@ -1,0 +1,148 @@
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-radius: 1rem;
+  background-color: #ffffff;
+
+  th,
+  td {
+    vertical-align: middle;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    font-weight: 500;
+    line-height: 160%;
+    letter-spacing: 0.168px;
+    color: #1818184d;
+    border-bottom: 0.5px solid rgba(24, 24, 24, 0.1);
+  }
+
+  tbody tr {
+    &:not(:last-child) td {
+      border-bottom: 0.5px solid rgba(24, 24, 24, 0.1);
+    }
+  }
+
+  td {
+    span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
+  }
+
+  &__adding span {
+    display: flex !important;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    width: 48px;
+    background-color: #ffffff;
+    box-shadow: -4px 0px 8px 0px rgba(139, 146, 156, 0.16);
+    position: sticky;
+    top: 0;
+    right: 0;
+  }
+
+  //@include phone {
+  //  thead {
+  //    background: rgba(24, 24, 24, 0.04);
+  //  }
+  //
+  //  tr {
+  //    height: 48px;
+  //  }
+  //}
+
+  &-bottom {
+    background: #ffffff;
+    padding: 16px;
+    //@include border-bottom-radius(1rem);
+    box-shadow: 0px -1px 8px 0px rgba(139, 146, 156, 0.16);
+  }
+
+  &-bottom-border {
+    //@include border-bottom-radius(0);
+  }
+}
+
+.table-borderless {
+  th {
+    border-bottom: none;
+  }
+
+  tbody tr {
+    &:not(:last-child) td {
+      border-bottom: none;
+    }
+  }
+}
+
+.table-bordered {
+  th,
+  td {
+    border: 0.5px solid #e8e8e8;
+    border-top: 0;
+  }
+
+  th {
+    border-top: 0.5px solid #e8e8e8;
+  }
+}
+
+.table-md {
+  td {
+    padding: 1rem 1.5rem;
+  }
+
+  th {
+    padding: 1.5rem;
+  }
+
+  //@include phone {
+  //  th,
+  //  td {
+  //    padding: 0.75rem 1rem;
+  //  }
+  //}
+}
+
+.table-sm {
+  td,
+  th {
+    padding: 0.66rem 1.5rem;
+  }
+
+  //@include phone {
+  //  th,
+  //  td {
+  //    padding: 0.75rem 1rem;
+  //  }
+  //}
+}
+
+//@media screen and (max-width: $landscape-phone) {
+//  .table {
+//    border-spacing: 0;
+//    th {
+//      background: rgba(24, 24, 24, 0.04);
+//      padding: 0.75rem 1.5rem;
+//    }
+//    td {
+//      width: 100%;
+//    }
+//  }
+//}
