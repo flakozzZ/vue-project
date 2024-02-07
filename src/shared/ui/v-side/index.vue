@@ -74,7 +74,7 @@ const {user} = storeToRefs(store)
 
 const menu_items = computed(() => {
   if (!user.value?.appRole?.name) return []
-  const items: string = {
+  const items = {
     "ROLE_ADMIN": ADMIN_MENU_ITEMS,
     "ROLE_MANAGER": MANAGER_MENU_ITEMS,
     "ROLE_TEACHER": TEACHER_MENU_ITEMS,
