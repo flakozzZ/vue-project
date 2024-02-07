@@ -69,7 +69,7 @@ export interface ILabel {
 export interface ITable {
   headers: ILabel[]
   items: any[]
-  addingItems: boolean
+  addingItems?: boolean
 }
 
 
