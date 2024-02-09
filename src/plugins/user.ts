@@ -57,7 +57,7 @@ export const useUserStore = defineStore('user', {
                     window.localStorage.setItem("@refresh-token", data?.refreshToken)
 
                 }
-
+                return data?.user
             } catch (e) {
                 console.error(e)
             }
