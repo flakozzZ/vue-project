@@ -19,15 +19,12 @@ export default {
 </template>
 
 <script setup lang="ts">
-
-import {ref} from "vue";
-
 const model = defineModel()
 
 
 interface Props {
   type: 'text' | 'password' | 'email' | 'url'
-  placeholder: string
+  placeholder?: string
   disabled?: boolean
   bgColor?: string
   autocomplete?: boolean

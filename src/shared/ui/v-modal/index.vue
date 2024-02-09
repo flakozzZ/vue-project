@@ -14,7 +14,7 @@ export default {
       <div v-if="props.show">
         <div class="modal-container" @click.stop>
           <div class="modal-header">
-            {{props.title}}
+            <slot name="header"></slot>
             <icon class="close__icon mt-1 cursor-pointer" name="close" @click="$emit('close')" />
           </div>
 
@@ -39,7 +39,6 @@ import Icon from "@/shared/ui/icon/index.vue";
 
 interface Props {
   show: boolean
-  title: string
 }
 const props = withDefaults(defineProps<Props>(), {})
 </script>
@@ -61,18 +60,19 @@ const props = withDefaults(defineProps<Props>(), {})
 
 .modal-container {
   display: inline-block;
-  width: auto;
-  height: auto;
-  margin: auto;
   padding: 20px 30px;
   background-color: rgb(31 41 55);
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
+  width: 1200px;
+  height: 100%;
+
 }
 
 .modal-header {
   display: flex;
+  justify-content: space-between;
   gap: 20px;
   align-items: center;
   margin-top: 0;

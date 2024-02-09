@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import axiosInstance from "@/app/providers/axios.ts";
+import type {ICourse} from "@/pages/admin/courses/CourseList.vue";
 
 export interface IUser {
     id: number,
@@ -12,7 +13,7 @@ export interface IUser {
     middleName: string,
     appRole: IRole,
     avatar: string,
-    // subjects: ICourse[],
+    subjects: ICourse[],
     // city: ICity,
     // school: ISchool,
     iin: string,

@@ -38,15 +38,19 @@ const subjects = ref([])
 const getSubjects = async () => {
   try {
     const {data} = await axiosInstance.get(`admin/subjects/${currentId.value}`)
-    subject.name = data?.name
-    subject.modules = data?.modules.map(subject_name => subject_name.name)
-    subjects.value = data.modules
-        .map(module => module.topics.map(topic => topic.name))
-        .reduce((acc, topics) => acc.concat(topics), []);
+    console.log(data.modules.map(module=> module.topics.map(topic=>topic.name)))
+    // subject.name = data?.name
+    // subject.modules = data?.modules.map(subject_name => subject_name.name)
+    // subjects.value = data.modules
+    //     .map(module => module.topics.map(topic => topic.name))
+    //     .reduce((acc, topics) => acc.concat(topics), []);
   } catch (e) {
     console.error(e)
   }
 }
+
+
+
 onMounted(getSubjects)
 </script>
 
