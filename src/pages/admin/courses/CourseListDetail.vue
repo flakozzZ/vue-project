@@ -26,6 +26,7 @@ interface ISubject {
   name: string,
   modules: IModule[]
 }
+
 const subject = reactive<ISubject>({
   name: '',
   modules: [],
@@ -38,17 +39,15 @@ const subjects = ref([])
 const getSubjects = async () => {
   try {
     const {data} = await axiosInstance.get(`admin/subjects/${currentId.value}`)
-    console.log(data.modules.map(module=> module.topics.map(topic=>topic.name)))
-    // subject.name = data?.name
-    // subject.modules = data?.modules.map(subject_name => subject_name.name)
-    // subjects.value = data.modules
-    //     .map(module => module.topics.map(topic => topic.name))
-    //     .reduce((acc, topics) => acc.concat(topics), []);
+    subject.name = data?.name
+    subject.modules = data?.modules.map(subject_name => subject_name.name)
+    subjects.value = data.modules
+        .map(module => module.topics.map(topic => topic.name))
+        .reduce((acc, topics) => acc.concat(topics), []);
   } catch (e) {
     console.error(e)
   }
 }
-
 
 
 onMounted(getSubjects)
@@ -56,16 +55,17 @@ onMounted(getSubjects)
 
 <template>
   <div class="text-2xl mb-5">
-    <span>Все курсы</span>
-    >
     <router-link to="/admin/courses">
-      <span v-if="subject.name">{{subject.name}}</span>
+
+      <span>Все курсы</span>
     </router-link>
-    <v-button class="mt-3" type="primary" v-for="module in subject.modules">{{module}}</v-button>
+    >
+    <span v-if="subject.name">{{ subject.name }}</span>
+    <v-button class="mt-3" type="primary" v-for="module in subject.modules">{{ module }}</v-button>
   </div>
   <v-table :headers="headers" :items="subjects">
     <template #key-name="{row}">
-      {{row}}
+      {{ row }}
     </template>
     <template #key-test="{row}">
       <v-button type="editable">edit</v-button>

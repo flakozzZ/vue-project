@@ -9,6 +9,7 @@ import VModal from "@/shared/ui/v-modal/index.vue";
 import VInput from "@/shared/ui/v-input/index.vue";
 import VSelect from "@/shared/ui/v-select/index.vue";
 import CourseModal from "@/widgets/course-modal/index.vue";
+import VButton from "@/shared/ui/v-button/index.vue";
 
 
 const headers = [
@@ -82,26 +83,39 @@ const router = useRouter()
 const courses = ref([])
 const is_loading = ref(false)
 const isShow = ref(false)
-const courseName = ref()
-const selectedType = ref<string>('Choose a context')
 const editIndex = ref<number>(-1)
 const currentTitle = computed(() => editIndex.value == -1 ? 'Добавить' : 'Редактировать')
 const contexts = ref([
-  { name: 'Full context', value: 'FULL_CONTEXT' },
-  { name: 'Half context', value: 'HALF_CONTEXT' },
-  { name: 'Third context', value: 'THIRD_CONTEXT' },
-  { name: 'No context', value: 'NO_CONTEXT' }
+  {name: 'Full context', value: 'FULL_CONTEXT'},
+  {name: 'Half context', value: 'HALF_CONTEXT'},
+  {name: 'Third context', value: 'THIRD_CONTEXT'},
+  {name: 'No context', value: 'NO_CONTEXT'}
 ])
+
+const defaultItem = {
+  id: 0,
+  name: null,
+  contextType: "Choose a context"
+}
+const editedItem = ref({
+  id: 0,
+  name: null,
+  contextType: "Choose a context"
+})
 
 const addItem = () => {
   editIndex.value = -1
+  editedItem.value = Object.assign({}, defaultItem)
   isShow.value = true
 }
 
 const editItem = (row: any) => {
   editIndex.value = row.id
-  courseName.value = row.name
-  selectedType.value = row.contextType
+  editedItem.value = Object.assign({
+    id: row.id,
+    name: row.name,
+    contextType: row.contextType
+  })
   isShow.value = true
 }
 const getCourseList = async () => {
@@ -120,6 +134,24 @@ const getCourseList = async () => {
   } finally {
     is_loading.value = false
   }
+}
+
+const onSubmitCourse = async () => {
+  try {
+    if (editIndex.value == -1) {
+      const response = axiosInstance.post('admin/subjects')
+      await getCourseList();
+    } else {
+      const response = axiosInstance.put('admin/subjects', {
+        ...editedItem.value,
+        id: editedItem.value.id
+      })
+    }
+
+  } catch (e){
+    console.error(e)
+  }
+
 }
 
 const toCoursePage = (row: any) => {
@@ -162,16 +194,19 @@ onMounted(getCourseList)
       @close="isShow = false"
   >
     <template #header>
-      {{currentTitle}}
+      {{ currentTitle }}
     </template>
     <template #body>
       <div class="text-xl mb-3">Название курса</div>
       <div class="flex gap-12">
-        <v-input v-model="courseName" type="text"/>
+        <v-input v-model="editedItem.name" type="text"/>
         <div class="w-52">
-          <v-select v-model="selectedType" :context="contexts"/>
+          <v-select v-model="editedItem.contextType" :context="contexts"/>
         </div>
       </div>
+    </template>
+    <template #footer>
+      <v-button @click="onSubmitCourse" type="secondary" size="sm">Сохранить</v-button>
     </template>
   </v-modal>
 </template>
