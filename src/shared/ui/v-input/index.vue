@@ -10,16 +10,12 @@ export default {
         :type="type"
         :placeholder="placeholder"
         :disabled="disabled"
-        :class="[
-
-        ]"
         v-model.trim="model"
         class="field__input">
   </div>
 </template>
 
 <script setup lang="ts">
-const model = defineModel()
 
 
 interface Props {
@@ -37,6 +33,7 @@ interface Props {
 withDefaults(defineProps<Props>(), {
   autocomplete: true
 })
+const model = defineModel()
 
 
 

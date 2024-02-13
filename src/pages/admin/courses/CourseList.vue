@@ -2,7 +2,7 @@
 import {useRouter} from "vue-router";
 import VTable from "@/shared/ui/v-table/index.vue";
 import axiosInstance from "@/app/providers/axios.ts";
-import {computed, onMounted, ref} from "vue"
+import {computed, onMounted, reactive, ref} from "vue"
 import type {IUser} from "@/plugins/user.ts";
 import Icon from "@/shared/ui/icon/index.vue";
 import VModal from "@/shared/ui/v-modal/index.vue";
@@ -66,24 +66,43 @@ export interface ITopic {
 export interface IModule {
   id?: number,
   name: string,
-  orderPosition: number,
+  orderPosition?: number,
   topics: ITopic[]
 }
 
 export interface ICourse {
   id?: number,
-  name: string,
+  name: string | null,
   createdDate?: string,
   modules: IModule[],
   teacher?: IUser,
   contextType: string
 }
 
+const TOPIC_BODY = {
+  name: '',
+  description: ''
+}
+
+const MODULE_BODY = {
+  name: '',
+  topics: [{...TOPIC_BODY}]
+}
+
+const INITIAL_DATA = {
+  name: "",
+  description: "",
+  contextType: 'NO_CONTEXT',
+  modules: [{...MODULE_BODY}],
+}
+
+
 const router = useRouter()
 const courses = ref([])
 const is_loading = ref(false)
 const isShow = ref(false)
 const editIndex = ref<number>(-1)
+// const course_data = reactive<ICourse>(structuredClone(INITIAL_DATA))
 const currentTitle = computed(() => editIndex.value == -1 ? 'Добавить' : 'Редактировать')
 const contexts = ref([
   {name: 'Full context', value: 'FULL_CONTEXT'},
@@ -92,30 +111,29 @@ const contexts = ref([
   {name: 'No context', value: 'NO_CONTEXT'}
 ])
 
-const defaultItem = {
-  id: 0,
-  name: null,
-  contextType: "Choose a context"
-}
+
 const editedItem = ref({
   id: 0,
   name: null,
-  contextType: "Choose a context"
+  contextType: "NO_CONTEXT",
+  modules: [{...MODULE_BODY}]
 })
+
 
 const addItem = () => {
   editIndex.value = -1
-  editedItem.value = Object.assign({}, defaultItem)
+  // Object.assign(course_data, structuredClone(INITIAL_DATA))
+  editedItem.value = Object.assign(structuredClone(INITIAL_DATA))
   isShow.value = true
 }
 
 const editItem = (row: any) => {
   editIndex.value = row.id
-  editedItem.value = Object.assign({
-    id: row.id,
-    name: row.name,
-    contextType: row.contextType
-  })
+  editedItem.value = Object.assign(row)
+  // course_data.id = row.id
+  // course_data.name = row.name
+  // course_data.contextType = row.contextType
+  // course_data.modules = row?.modules.length === 0 ? [structuredClone(MODULE_BODY)] : row?.modules
   isShow.value = true
 }
 const getCourseList = async () => {
@@ -136,19 +154,47 @@ const getCourseList = async () => {
   }
 }
 
+// const onSubmitCourse = async () => {
+//   try {
+//     const url = 'admin/subjects'
+//     const payload = {
+//       ...(course_data.id && ({id: course_data.id})),
+//       name: course_data.name,
+//       contextType: course_data.contextType,
+//       modules: course_data.modules.map((module, idx) => ({
+//         ...module,
+//         topics: module.topics.map((topic, tIdx) => ({...topic, orderPosition: tIdx})),
+//         orderPosition: idx
+//       }))
+//     }
+//     if(editIndex.value === -1) await axiosInstance.post(url, payload)
+//     else await axiosInstance.put(url, payload)
+//     await getCourseList()
+//     isShow.value = false
+//   } catch (e) {
+//     console.error(e)
+//   }
+//
+// }
+
 const onSubmitCourse = async () => {
   try {
-    if (editIndex.value == -1) {
-      const response = axiosInstance.post('admin/subjects')
-      await getCourseList();
-    } else {
-      const response = axiosInstance.put('admin/subjects', {
-        ...editedItem.value,
-        id: editedItem.value.id
-      })
+    const url = 'admin/subjects'
+    const payload = {
+      ...(editedItem.value.id && ({id: editedItem.value.id})),
+      name: editedItem.value.name,
+      contextType: editedItem.value.contextType,
+      modules: editedItem.value.modules.map((module, idx) => ({
+        ...module,
+        topics: module.topics.map((topic, tIdx) => ({...topic, orderPosition: tIdx})),
+        orderPosition: idx
+      }))
     }
-
-  } catch (e){
+    if(editIndex.value === -1) await axiosInstance.post(url, payload)
+    else await axiosInstance.put(url, payload)
+    await getCourseList()
+    isShow.value = false
+  } catch (e) {
     console.error(e)
   }
 
