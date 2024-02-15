@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "primeicons/primeicons.css";
 
 body {
   background: rgb(17, 24, 39);
@@ -12,4 +13,9 @@ body {
   width: 24px;
   height: 24px;
   color: currentColor;
+  &--2 {
+    width: 36px;
+    height: 36px;
+  }
 }
+

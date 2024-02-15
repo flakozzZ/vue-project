@@ -5,6 +5,7 @@ import {onMounted, reactive, ref} from "vue";
 import {useRoute} from "vue-router";
 import VButton from "@/shared/ui/v-button/index.vue";
 import type {IModule} from "@/pages/admin/courses/CourseList.vue";
+import VModal from "@/shared/ui/v-modal/index.vue";
 
 
 const headers = [
@@ -33,8 +34,13 @@ const subject = reactive<ISubject>({
 })
 
 const route = useRoute()
+const isShow = ref(false)
 const currentId = ref<string | string[]>(route.params.id)
 const subjects = ref([])
+
+const openModal = () => {
+  isShow.value = true
+}
 
 const getSubjects = async () => {
   try {
@@ -56,24 +62,28 @@ onMounted(getSubjects)
 <template>
   <div class="text-2xl mb-5">
     <router-link to="/admin/courses">
-
       <span>Все курсы</span>
     </router-link>
     >
     <span v-if="subject.name">{{ subject.name }}</span>
-    <v-button class="mt-3" type="primary" v-for="module in subject.modules">{{ module }}</v-button>
+    <div class="flex flex-wrap gap-3 mt-4">
+      <v-button size="sm" type="primary" v-for="module in subject.modules">{{ module }}</v-button>
+    </div>
   </div>
   <v-table :headers="headers" :items="subjects">
     <template #key-name="{row}">
       {{ row }}
     </template>
     <template #key-test="{row}">
-      <v-button type="editable">edit</v-button>
+      <v-button @click="openModal" type="editable">Изменить</v-button>
     </template>
     <template #key-task="{row}">
-      <v-button type="editable">edit</v-button>
+      <v-button type="editable">Изменить</v-button>
     </template>
   </v-table>
+  <v-modal :show="isShow" @close="isShow = false">
+
+  </v-modal>
 </template>
 
 <style scoped>

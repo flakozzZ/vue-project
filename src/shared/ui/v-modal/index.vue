@@ -56,6 +56,7 @@ const props = withDefaults(defineProps<Props>(), {})
   justify-content: center;
   align-items: center;
   transition: opacity 0.3s ease;
+
 }
 
 .modal-container {
@@ -66,7 +67,8 @@ const props = withDefaults(defineProps<Props>(), {})
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   width: 1200px;
-  height: 100%;
+  max-height: 700px;
+  overflow-y: auto;
 
 }
 
@@ -78,10 +80,16 @@ const props = withDefaults(defineProps<Props>(), {})
   margin-top: 0;
   font-size: 20px;
   color: #ffffff;
+
 }
 
 .modal-body {
   margin: 20px 0;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  float: right;
 }
 
 .close__icon {
